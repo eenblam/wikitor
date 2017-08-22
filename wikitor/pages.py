@@ -1,6 +1,6 @@
 import sqlite3
 
-class Connection(object):
+class Pages(object):
     def __init__(self, db, table):
         self.conn = sqlite3.connect(db)
         s = 'INSERT INTO {}(endpoint, content) VALUES (?,?)'
