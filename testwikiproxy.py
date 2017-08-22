@@ -10,7 +10,6 @@ if __name__ == '__main__':
         process = stem.process.launch_tor_with_config(
                 config = {
                     'SocksPort': str(SOCKS_PORT),
-                    'ExitNodes': '{ru}'
                 },
                 init_msg_handler=print_bootstrap_lines)
         for title in proxy.titles_from_query('sewing'):
