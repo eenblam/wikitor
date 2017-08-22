@@ -11,7 +11,8 @@ except IndexError:
 
 s = '''CREATE TABLE {}(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    endpoint text,
+    pageid text,
+    title text,
     content text,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
     );'''.format(NAME)
