@@ -14,7 +14,7 @@ class Pages(object):
         except sqlite3.OperationalError as err:
             #TODO Could not log, enqueue input for retry?
             print("Could not insert page at pageid {}. Error: "
-                    .format(pageid, err)
+                    .format(pageid, err))
 
     def close(self):
         self.conn.close()

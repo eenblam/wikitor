@@ -71,7 +71,7 @@ class WikiProxy(object):
             'titles': title_string
         }
         res = self.get_json(params)
-        for pageid in res['query']['pages'].keys():
+        for pageid in get_query_keys(res):
             yield pageid
 
     def get_page_by_id(self, pageid):
@@ -81,16 +81,41 @@ class WikiProxy(object):
             'prop': 'text',
             'pageid': pageid
         }
-        return self.get_json(params)
+        res = self.get_json(params)
+        try:
+            page = res['parse']
+        except TypeError:
+            page = None
+        return page
 
-    def _get_title_content_pairs(self, title_string):
-        result_stream = (self.get_page_by_id(pageid)['parse']
+    def _get_content(self, title_string):
+        result_stream = ((pageid, self.get_page_by_id(pageid))
                         for pageid
                         in self.titles_to_pageids(title_string))
-        return ((x['title'], x['text']['*'])
-                for x in result_stream)
+        return ((pageid, get_title(x), get_text(x))
+                for pageid,x in result_stream)
+        #return ((pageid, x['title'], x['text']['*'])
+        #        for pageid,x in result_stream)
 
-    def gen_pairs_from_query(self, query):
+    def gen_from_query(self, query):
         titles = self.title_string_from_query(query)
-        pairs = self._get_title_content_pairs(titles)
-        return pairs
+        data_stream = self._get_content(titles)
+        return data_stream
+
+def get_title(x):
+    try:
+        return x['title']
+    except TypeError:
+        return None
+
+def get_text(x):
+    try:
+        return x['text']['*']
+    except TypeError:
+        return None
+
+def get_query_keys(x):
+    try:
+        return x['query']['pages'].keys()
+    except TypeError:
+        return []
