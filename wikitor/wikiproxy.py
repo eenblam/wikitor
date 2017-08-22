@@ -1,7 +1,6 @@
 import json
 import StringIO
 
-import requests
 import pycurl
 
 from url import *
